@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
     before_action :set_current_user, only: [:create, :show]
-    before_action :require_login, only: [:show]
+    before_action :require_login, only: [:index, :create]
 
     def create
         user = User.new(user_params)
@@ -15,7 +15,7 @@ class UsersController < ApplicationController
 
     def show
         if logged_in?
-            render json: current_user
+            render json: @current_user
         else
             render json: { error: "Unauthorized" }, status: :unauthorized
         end
@@ -30,6 +30,7 @@ class UsersController < ApplicationController
     def set_current_user
         @current_user = User.find_by(id: session[:user_id]) if logged_in?
     end
+    
 
     def logged_in?
         session[:user_id].present?
