@@ -15,7 +15,13 @@ class SessionsController < ApplicationController
             session.delete(:user_id)
             head :no_content
         else
-            render json: { error: "unauthorized" }, status: :unauthorized
+            render json: { error: ["unauthorized"] }, status: :unauthorized
         end
+    end
+
+    private 
+
+    def logged_in?
+        session[:user_id].present?
     end
 end

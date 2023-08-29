@@ -1,10 +1,13 @@
 class RecipesController < ApplicationController
+
+    before_action :set_current_user,only: [:create]
+
     def index
         if logged_in?
           recipes = Recipe.all.includes(:user)
           render json: recipes, include: :user
         else
-          render json: { error: "Unauthorized" }, status: :unauthorized
+          render json: { error: ["Unauthorized"] }, status: :unauthorized
         end
     end
 
@@ -18,7 +21,7 @@ class RecipesController < ApplicationController
             render json: { errors: recipe.errors.full_messages }, status: :unprocessable_entity
           end
         else
-          render json: { error: "Unauthorized" }, status: :unauthorized
+          render json: { error: ["Unauthorized"] }, status: :unauthorized
         end
     end
     
